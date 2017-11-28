@@ -36,7 +36,8 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="{{ route('products.index') }}">Products</a></li>
+                        <li><a href="{{ route('products.create') }}">New Products</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -70,7 +71,18 @@
                 </div>
             </div>
         </nav>
-
+        <div class="container">
+          @if ($errors->count() > 0)
+            <ul class="list-group">
+              @foreach ($errors->all() as $error)
+                <li class="list-group-item text-danger">{{ $error }}</li>
+              @endforeach
+            </ul>
+          @endif
+          @if (Session::has('success'))
+            <div class="alert alert-success">{{ Session::get('success') }}</div>
+          @endif
+        </div>
         @yield('content')
     </div>
 
