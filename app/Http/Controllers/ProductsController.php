@@ -12,10 +12,22 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+      $this->middleware('auth');
+    }
+
     public function index()
     {
-        $products = Product::latest();
+        $products = Product::latest()->paginate(10);
+        // $products = Product::orderBy('id','DESC');
+
+        // $products = Product::all();
         return view('products.index',compact('products'));
+
+        // return view('products.index',['products' => Product::all()]);
+
     }
 
     /**
@@ -36,7 +48,28 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+          'name' => 'required',
+          'price' => 'required|numeric',
+          'image' => 'required|image',
+          'description' => 'required'
+        ]);
+        // dd($request->all());
+        // Product::create($request->all());
+        $product = new Product;
+        $product_image = $request->image;
+        $product_image_new_name = time() . $product_image->getClientOriginalName();
+        $product_image->move('uploads/products', $product_image_new_name);
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->image = 'uploads/products/' . $product_image_new_name;
+        $product->description = $request->description;
+
+        $product->save();
+
+        return redirect()->route('products.index')
+                        ->with('success','Product created succesfully.');
     }
 
     /**
@@ -58,7 +91,7 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('products.edit', ['product' => Product::find($id)]);
     }
 
     /**
@@ -81,6 +114,14 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $product = Product::find($id);
+      if(file_exists($product->image)){
+        unlink($product->image);
+      };
+
+      $product->delete();
+
+      return redirect()->back()
+                          ->with('success','Product deleted succesfully.');
     }
 }

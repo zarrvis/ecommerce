@@ -20,14 +20,14 @@
                         <tr>
                           <td>{{ $product->name }}</td>
                           <td>{{ $product->price }}</td>
-                          <td><a href="{{ route('products.edit', ['id' => $product->id]) }}" class= "btn btn-default btn-xs">Edit</a></td>
+                          <td><a href="{{ route('products.edit', ['id' => $product->id]) }}" class= "btn btn-warning btn-xs">Edit</a></td>
                           <td>
-                            <form action="{{ route('products.delete', ['id' => $product->id]) }}" method="post">
+                            <form action="{{ route('products.destroy', ['id' => $product->id]) }}" method="post">
                               {{ csrf_field() }}
                               {{ method_field('DELETE') }}
-                              <button type="button" class="btn btn-danger btn-xs">Delete</button>
+                              <button class="btn btn-danger btn-xs">Delete</button>
                             </form>
-                          </td>
+                          </td>                          
                         </tr>
                       @endforeach
                     </tbody>
