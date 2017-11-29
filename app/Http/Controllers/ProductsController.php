@@ -103,7 +103,12 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+          'name' => 'required',
+          'price' => 'required|numeric',
+          'description' => 'required'
+        ]);
+        // dd($request->all());
     }
 
     /**
