@@ -109,6 +109,28 @@ class ProductsController extends Controller
           'description' => 'required'
         ]);
         // dd($request->all());
+        $product = Product::find($id);
+
+        if($request->hasFile('image'))
+        {
+
+          if(file_exists($product->image)){
+            unlink($product->image);
+          };
+
+          $product_image = $request->image;
+          $product_image_new_name = time() . $product_image->getClientOriginalName();
+          $product_image->move('uploads/products', $product_image_new_name);
+          $product->image = 'uploads/products/' . $product_image_new_name;
+          $product->save();
+        }
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->save();
+        return redirect()->route('products.index')
+                        ->with('success', 'Product updated succesfully.');
     }
 
     /**

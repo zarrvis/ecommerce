@@ -27,7 +27,7 @@
                               {{ method_field('DELETE') }}
                               <button class="btn btn-danger btn-xs">Delete</button>
                             </form>
-                          </td>                           
+                          </td>
                         </tr>
                       @endforeach
                     </tbody>
